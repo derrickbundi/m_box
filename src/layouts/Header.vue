@@ -12,7 +12,7 @@
         />
 
         <q-toolbar-title>
-          M_Box
+          <q-btn flat router to="/">M_Box</q-btn>
         </q-toolbar-title>
 
         <q-btn stretch flat label="Logout">

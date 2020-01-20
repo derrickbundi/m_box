@@ -6,14 +6,46 @@ const routes = [
       {
         path: '',
         component: () => import('pages/Index.vue')
-      },
+      }
+    ]
+  },
+  {
+    path: '/meet_up',
+    component: () => import('layouts/Header'),
+    children: [
       {
-        path: '/meet_up',
-        component: () => import('pages/meetup/Meetup.vue')
-      },
+        path: '',
+        component: () => import('pages/meetup/Meetups.vue')
+      }
+      // {
+      //   path: '/meet_up/new',
+      //   component: () => import('pages/meetup/Createmeetup.vue')
+      // },
+      // {
+      //   path: '/meet_up/:id',
+      //   props: true,
+      //   component: () => import('pages/meetup/Meetup.vue')
+      // }
+    ]
+  },
+  {
+    path: '/meet_up/new',
+    component: () => import('layouts/Header'),
+    children: [
       {
-        path: '/meet_up/new',
+        path: '',
         component: () => import('pages/meetup/Createmeetup.vue')
+      }
+    ]
+  },
+  {
+    path: '/meet_up/:id',
+    component: () => import('layouts/Header'),
+    children: [
+      {
+        path: '/meet_up/:id',
+        props: true,
+        component: () => import('pages/meetup/Meetup.vue')
       }
     ]
   },
