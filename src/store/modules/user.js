@@ -1,3 +1,5 @@
+import { firebaseAuth } from 'boot/firebase'
+
 const state = {
   loadedMeetups: [
     {
@@ -22,18 +24,52 @@ const state = {
       date: '2020-01-22'
     }
   ],
-  user: {
-    id: 'asdfghj123',
-    registeredMeetups: ['qwerty123']
-  }
+  user: null
 }
 
 const mutations = {
-
+  createMeetup (state, payload) {
+    state.loadedMeetups.push(payload)
+  },
+  setUser (state, payload) {
+    state.user = payload
+  }
 }
 
 const actions = {
-
+  createMeetup ({ commit }, payload) {
+    const meetup = {
+      name: payload.name,
+      location: payload.location,
+      description: payload.description,
+      imageUrl: payload.imageUrl,
+      date: payload.date,
+      id: 'qwerty111'
+    }
+    commit('createMeetup', meetup)
+  },
+  signUserUp ({ commit }, payload) {
+    firebaseAuth.createUserWithEmailAndPassword(
+      // payload.firstName,
+      // payload.lastName,
+      payload.email,
+      payload.password
+    )
+      .then(
+        user => {
+          const newUser = {
+            id: user.UID,
+            registeredMeetups: []
+          }
+          commit('setUser', newUser)
+        }
+      )
+      .catch(
+        error => {
+          console.log(error)
+        }
+      )
+  }
 }
 
 const getters = {

@@ -24,7 +24,7 @@
       <q-btn unelevated rounded color="primary" label="Explore Meetup" class="q-mr-md" router to="/meet_up">
       <q-tooltip content-class="bg-accent">Explore Meetup</q-tooltip>
       </q-btn>
-      <q-btn unelevated rounded color="primary" label="Organise Meetup" router to="/meet_up/new">
+      <q-btn unelevated rounded color="primary" label="Organise Meetup" router to="/create">
         <q-tooltip content-class="bg-accent">Organise Meetup</q-tooltip>
       </q-btn>
     </div>

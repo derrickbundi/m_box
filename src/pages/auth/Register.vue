@@ -3,7 +3,7 @@
     <div class="flex flex-center">
         <q-card class="my-card q-mt-md">
             <q-form
-      @submit="onSubmit"
+      @submit.prevent="onRegister"
       class="q-gutter-md"
     >
       <q-card-section>
@@ -12,21 +12,21 @@
         label="First Name *"
         lazy-rules
         outlined
-        :rules="[ val => val && val.length > 0 || 'Please type something']"
+        :rules="[ val => val && val.length > 0 || 'Please type First Name']"
       />
       <q-input
         v-model="lastName"
         label="Last Name *"
         lazy-rules
         outlined
-        :rules="[ val => val && val.length > 0 || 'Please type something']"
+        :rules="[ val => val && val.length > 0 || 'Please type Last Name']"
       />
       <q-input
         v-model="email"
         label="Email *"
         lazy-rules
         outlined
-        :rules="[ val => val && val.length > 0 || 'Please type something']"
+        :rules="[ val => val && val.length > 0 || 'Please type Email']"
       />
 
       <q-input
@@ -36,19 +36,17 @@
         lazy-rules
         outlined
         :rules="[
-          val => val !== null && val !== '' || 'Please type your password',
-          val => val > 0 && val < 100 || 'Please type a real password'
+          val => val !== null && val !== '' || 'Please type your password'
         ]"
       />
       <q-input
         type="password"
-        v-model="password"
+        v-model="cpassword"
         label="Confirm Password *"
         lazy-rules
         outlined
         :rules="[
-          val => val !== null && val !== '' || 'Please type your password',
-          val => val > 0 && val < 100 || 'Please type a real password'
+          val => val !== null && val !== '' || 'Please type your password'
         ]"
       />
       <q-separator class="q-mt-md"/>
@@ -56,7 +54,7 @@
         <q-btn router to="/user" label="Back">
         <q-tooltip content-class="bg-accent">Go Back</q-tooltip>
         </q-btn>
-        <q-btn color="primary">Register</q-btn>
+        <q-btn type="submit" color="primary">Register</q-btn>
       </q-card-actions>
       </q-card-section>
       </q-form>
@@ -67,7 +65,24 @@
 
 <script>
 export default {
-
+  data: () => ({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    cpassword: ''
+  }),
+  methods: {
+    onRegister () {
+      const userData = {
+        // firstName: this.firstName,
+        // lastName: this.lastName,
+        email: this.email,
+        password: this.password
+      }
+      this.$store.dispatch('user/signUserUp', userData)
+    }
+  }
 }
 </script>
 

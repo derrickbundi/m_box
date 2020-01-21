@@ -5,7 +5,7 @@
     <q-separator class="q-mt-md"></q-separator>
     <!-- <q-card outlined class="q-mt-md"> -->
         <q-form
-      @submit.prevent="simulateSubmit"
+      @submit.prevent="onCreateMeetup"
       class="q-mt-md"
     >
       <q-input
@@ -13,20 +13,27 @@
         v-model="name"
         label="Name of meetup *"
         lazy-rules
-        :rules="[ val => val && val.length > 0 || 'Please type something']"
+        :rules="[ val => val && val.length > 0 || 'Please type name of meetup']"
       />
 
       <q-input
         outlined
         v-model="location"
         label="Location *"
-        :rules="[ val => val && val.length > 0 || 'Please type something']"
+        :rules="[ val => val && val.length > 0 || 'Please type location of meetup']"
+      />
+
+      <q-input
+        outlined
+        v-model="imageUrl"
+        label="Image URL *"
+        :rules="[ val => val && val.length > 0 || 'Please type location of meetup']"
       />
 
         <div class="text-h6">
             Description:
         </div>
-      <q-editor v-model="editor" min-height="5rem" />
+      <q-editor v-model="description" min-height="5rem" />
 
       <!-- <div class="q-pa-md" style="max-width: 300px"> -->
     <q-input filled v-model="date" class="q-mt-md">
@@ -48,15 +55,13 @@
     </q-input>
   <!-- </div> -->
 
-      <q-uploader
+      <!-- <q-uploader
         label="Upload Image"
         class="q-mt-md"
         square
         flat
         bordered
-      />
-
-      <q-toggle v-model="accept" label="I accept the license and terms" />
+      /> -->
 
       <div align="right">
         <q-btn router to="/" class="q-mr-md" label="Back">
@@ -83,17 +88,25 @@
 <script>
 export default {
   data: () => ({
-    accept: false,
-    editor: '*',
     date: '2019-02-01 12:44',
-    submitting: false
+    submitting: false,
+    name: '',
+    location: '',
+    description: '',
+    imageUrl: ''
   }),
   methods: {
-    simulateSubmit () {
+    onCreateMeetup () {
+      const meetupData = {
+        name: this.name,
+        location: this.location,
+        description: this.description,
+        imageUrl: this.imageUrl,
+        date: this.date
+      }
       this.submitting = true
-      setTimeout(() => {
-        this.submitting = false
-      }, 3000)
+      this.$store.dispatch('user/createMeetup', meetupData)
+      this.$router.push('/meet_up')
     }
   }
 }
