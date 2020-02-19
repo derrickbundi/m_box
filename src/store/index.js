@@ -5,23 +5,26 @@ import user from './modules/user'
 
 Vue.use(Vuex)
 
-/*
- * If not building with SSR mode, you can
- * directly export the Store instantiation;
- *
- * The function below can be async too; either use
- * async/await or return a Promise which resolves
- * with the Store instance.
- */
-
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
       user
     },
-
+    // store,
     // enable strict mode (adds overhead!)
     // for dev mode only
+    // created () {
+    //   firebase.initializeApp({
+    //     apiKey: 'AIzaSyCIfoBBsHmThtp83nX02R0EvXZyisB8yJA',
+    //     authDomain: 'meetup-5cffc.firebaseapp.com',
+    //     databaseURL: 'https://meetup-5cffc.firebaseio.com',
+    //     projectId: 'meetup-5cffc',
+    //     storageBucket: 'meetup-5cffc.appspot.com',
+    //     messagingSenderId: '187865459556',
+    //     appId: '1:187865459556:web:10cf1fecaf7c7dc2c9e871'
+    //   })
+    //   this.$store.dispatch('user/loadMeetups')
+    // },
     strict: process.env.DEV
   })
 

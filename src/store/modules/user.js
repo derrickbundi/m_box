@@ -1,4 +1,5 @@
-import { firebaseAuth } from 'boot/firebase'
+import { firebase } from 'firebase/app'
+import axios from 'axios'
 
 const state = {
   loadedMeetups: [
@@ -24,51 +25,127 @@ const state = {
       date: '2020-01-22'
     }
   ],
-  user: null
+  user: null,
+  submitting: false,
+  error: null
 }
 
 const mutations = {
+  setLoadedMeetups (state, payload) {
+    state.loadedMeetups = payload
+    // this.$store.dispatch('user/loadMeetups')
+  },
   createMeetup (state, payload) {
     state.loadedMeetups.push(payload)
   },
   setUser (state, payload) {
     state.user = payload
+  },
+  setLoading (state, payload) {
+    state.submitting = payload
+  },
+  setError (state, payload) {
+    state.error = payload
+  },
+  clearError (state, payload) {
+    state.error = null
   }
 }
 
 const actions = {
+  loadMeetups ({ commit }) {
+    firebase.database().ref('meetup').once('value')
+      .then((data) => {
+        const meetups = []
+        const obj = data.val()
+        for (let key in obj) {
+          meetups.push({
+            id: key,
+            name: obj[key].name,
+            location: obj[key].location,
+            description: obj[key].description,
+            imageUrl: obj[key].imageUrl,
+            date: obj[key].date
+          })
+        }
+        // this.$store.dispatch('loadedMeetups')
+        commit('setLoadedMeetups', meetups)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  },
   createMeetup ({ commit }, payload) {
     const meetup = {
       name: payload.name,
       location: payload.location,
       description: payload.description,
       imageUrl: payload.imageUrl,
-      date: payload.date,
-      id: 'qwerty111'
+      date: payload.date
     }
-    commit('createMeetup', meetup)
+    firebase.database().ref('meetup').push(meetup)
+      .then((data) => {
+        // console.log(data)
+        const key = data.key
+        commit('createMeetup', {
+          ...meetup,
+          id: key
+        })
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   },
   signUserUp ({ commit }, payload) {
-    firebaseAuth.createUserWithEmailAndPassword(
+    return new Promise((resolve, reject) => {
+      commit('setLoading', true)
+      commit('clearError')
+      // firebase.auth().createUserWithEmailAndPassword(
       // payload.firstName,
       // payload.lastName,
-      payload.email,
-      payload.password
-    )
-      .then(
-        user => {
-          const newUser = {
-            id: user.UID,
-            registeredMeetups: []
+      // payload.email,
+      // payload.password
+      // )
+      axios({ url: 'http://localhost:8000/api/user/register', data: payload, method: 'POST' })
+        .then(
+          user => {
+            commit('setLoading', false)
+            const newUser = {
+              id: user.uid,
+              registeredMeetups: []
+            }
+            commit('setUser', newUser)
           }
-          commit('setUser', newUser)
+        )
+        .catch(
+          error => {
+            commit('setLoading', false)
+            commit('setError', error)
+            console.log(error)
+          }
+        )
+    })
+  },
+  signUserIn ({ commit }, payload) {
+    commit('setLoading', true)
+    commit('clearError')
+    firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
+      .then(user => {
+        commit('setLoading', false)
+        const newUser = {
+          id: user.uid,
+          registeredMeetups: []
         }
-      )
-      .catch(
-        error => {
-          console.log(error)
-        }
-      )
+        commit('setUser', newUser)
+      })
+      .catch(error => {
+        commit('setLoading', false)
+        commit('setError', error)
+        console.log(error)
+      })
+  },
+  clearError ({ commit }) {
+    commit('clearError')
   }
 }
 
@@ -87,6 +164,15 @@ const getters = {
         return meetup.id === meetupId
       })
     }
+  },
+  user (state) {
+    return state.user
+  },
+  loading (state) {
+    return state.submitting
+  },
+  error (state) {
+    return state.error
   }
 }
 

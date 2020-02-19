@@ -1,3 +1,4 @@
+// import Guard from './guard'
 const routes = [
   {
     path: '/',
@@ -26,6 +27,7 @@ const routes = [
       {
         path: '',
         component: () => import('pages/meetup/Createmeetup.vue')
+        // beforeEnter: Guard
       }
     ]
   },
@@ -41,7 +43,7 @@ const routes = [
     ]
   },
   {
-    path: '/user',
+    path: '/login',
     component: () => import('layouts/Header.vue'),
     children: [
       {
@@ -49,11 +51,21 @@ const routes = [
         component: () => import('pages/auth/Login.vue')
       },
       {
-        path: '/user/register',
+        path: '/register',
         component: () => import('pages/auth/Register.vue')
       }
     ]
   }
+  // {
+  //   path: '/user/register',
+  //   component: () => import('layouts/Header'),
+  //   children: [
+  //     {
+  //       path: '',
+  //       component: () => import('pages/auth/Register.vue')
+  //     }
+  //   ]
+  // }
 ]
 
 // Always leave this as last one

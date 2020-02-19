@@ -36,26 +36,6 @@ export default {
   name: 'PageIndex',
   data: () => ({
     slide: 'first'
-    // meetups: [
-    //   {
-    //     id: 'qwerty123',
-    //     image: 'https://cdn.quasar.dev/img/mountains.jpg',
-    //     title: 'One Meetup',
-    //     name: 'first'
-    //   },
-    //   {
-    //     id: 'qwerty456',
-    //     image: 'https://cdn.quasar.dev/img/parallax1.jpg',
-    //     title: 'Two Meetup',
-    //     name: 'second'
-    //   },
-    //   {
-    //     id: 'qwerty789',
-    //     image: 'https://cdn.quasar.dev/img/parallax2.jpg',
-    //     title: 'Three Meetup',
-    //     name: 'third'
-    //   }
-    // ]
   }),
   methods: {
     onLoad (id) {

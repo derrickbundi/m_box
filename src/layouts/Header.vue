@@ -15,11 +15,11 @@
           <q-btn flat router to="/">M_Box</q-btn>
         </q-toolbar-title>
 
-        <q-btn stretch flat label="Logout">
+        <!-- <q-btn stretch flat label="Logout">
           <q-tooltip content-class="bg-accent">Log me out</q-tooltip>
-        </q-btn>
+        </q-btn> -->
 
-        <q-btn stretch flat label="Login" router to="/user">
+        <q-btn stretch flat v-if="!userIsAutheticated" label="Login" router to="/login">
           <q-tooltip content-class="bg-accent">Log me in</q-tooltip>
         </q-btn>
 
@@ -138,6 +138,11 @@ export default {
   data () {
     return {
       leftDrawerOpen: false
+    }
+  },
+  computed: {
+    userIsAutheticated () {
+      return this.$store.getters['user/user'] !== null && this.$store.getters['user/user'] !== undefined
     }
   }
 }

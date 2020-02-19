@@ -2,7 +2,7 @@
 <q-page>
     <div class="flex flex-center">
         <q-card class="my-card q-mt-md">
-            <q-form @submit.prevent="simSubmit"
+            <q-form @submit.prevent="onLogin"
     >
       <q-card-section>
       <q-input
@@ -20,13 +20,12 @@
         lazy-rules
         outlined
         :rules="[
-          val => val !== null && val !== '' || 'Please type your password',
-          val => val > 0 && val < 100 || 'Please type a real password'
+          val => val !== null && val !== '' || 'Please type your password'
         ]"
       />
        <q-separator class="q-mt-md"/>
       <q-card-actions class="q-mt-md" align="right">
-        <q-btn router to="/user/register" label="registered? sign up">
+        <q-btn router to="/register" label="registered? sign up">
         <q-tooltip content-class="bg-accent" color="brown-5">Register</q-tooltip>
         </q-btn>
         <q-btn type="submit" :loading="submitting" color="primary" label="Login">
@@ -45,14 +44,30 @@
 <script>
 export default {
   data: () => ({
-    submitting: false
+    submitting: false,
+    email: '',
+    password: ''
   }),
+  computed: {
+    user () {
+      return this.$store.getters['user/user']
+    }
+  },
+  watch: {
+    user (value) {
+      if (value !== null && value !== undefined) {
+        this.$router.push('/')
+      }
+    }
+  },
   methods: {
-    simSubmit () {
+    onLogin () {
+      const userData = {
+        email: this.email,
+        password: this.password
+      }
       this.submitting = true
-      setTimeout(() => {
-        this.submitting = false
-      }, 3000)
+      this.$store.dispatch('user/signUserIn', userData)
     }
   }
 }
